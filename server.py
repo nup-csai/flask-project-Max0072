@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 import json
 app = Flask(__name__)
 
@@ -13,7 +13,7 @@ def tasks():
     x = ""
     with open("tasks.json", "r") as f:
         data = json.load(f)
-    for i in data:
-        x += f"{i["date"]} {["time"]}: {i["task"]}\n"
+    #for i in data:
+        #x += f"{i["date"]} {["time"]}: {i["task"]}\n"
 
-    return f"{x}"
+    return jsonify(data)
