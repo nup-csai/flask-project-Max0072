@@ -11,8 +11,8 @@ def tasks():
     with open("tasks.json", "r") as f:
         tas = json.load(f)
     task = ""
-    for i in tas:
-        task += f"{i['date']}, {i['time']}, {i['task']} \n"
+    for i in range(2):
+        task += f"{tas[i]['date']}, {tas[i]['time']}, {tas[i]['task']} \n"
 
     return task
 
