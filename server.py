@@ -13,8 +13,8 @@ def tasks():
     x = ""
     with open("tasks.json", "r") as f:
         data = json.load(f)
-        for i in data:
-            x += f"{i["date"]}{["time"]}{i["task"]}"
-            x += "\n"
+    for i in data:
+        x += f"{i["date"]}{["time"]}{i["task"]}"
+        x += "\n"
 
     return x
