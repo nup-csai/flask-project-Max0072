@@ -12,5 +12,5 @@ def home():
 def tasks():
     with open("tasks.json", "r") as f:
         data = json.load(f)
-    y = data[0]("task")
+    y = data[0]["task"]
     return y
