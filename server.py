@@ -10,8 +10,11 @@ def home():
 
 @app.route("/tasks")
 def tasks():
+    x = ""
     with open("tasks.json", "r") as f:
         data = json.load(f)
-    y = data[0]["task"]
-    x = data[1]["task"]
-    return f"{y} {x}"
+        for i in data:
+            x += f"{i["date"]}{["time"]}{i["task"]}"
+            x += "\n"
+
+    return x
