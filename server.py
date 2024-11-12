@@ -8,6 +8,7 @@ def home():
     return "task tracker"
 
 
+
 @app.route("/tasks")
 def tasks():
     with open("tasks.json", "r") as f:
