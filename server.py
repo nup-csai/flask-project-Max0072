@@ -9,7 +9,7 @@ def home():
 
 
 @app.route("/tasks")
-def tasks():
+def home():
     data = json.load(open("tasks.json"))
     x = data[0]("task")
     return x
