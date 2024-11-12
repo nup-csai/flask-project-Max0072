@@ -13,4 +13,5 @@ def tasks():
     with open("tasks.json", "r") as f:
         data = json.load(f)
     y = data[0]["task"]
-    return y
+    x = data[1]["task"]
+    return y, x
