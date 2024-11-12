@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "inferior task tracker"
+    return "task tracker"
 
 
 @app.route("/tasks")
