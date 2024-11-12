@@ -10,6 +10,9 @@ def home():
 def tasks():
     with open("tasks.json", "r") as f:
         tas = json.load(f)
-    task = f"{tas[0]}, {tas[1]}"
+    task = ""
+    for i in tas:
+        task += f"{i['date']}, {i['time']}, {i['task']} \n"
+
     return task
 
