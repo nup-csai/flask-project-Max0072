@@ -22,7 +22,7 @@ Whether you're stocking up for the winter or preparing for a cozy evening by the
 
 ### Project structure
 flask-project-Max0072/                                      <br>
-│                                                           <br>
+ │                                                           <br>
 ├── instance/          # Folder with the database (SQLite)  <br>
 ├── pictures/          # Folder with images                 <br>
 ├── static/            # Folder with CSS styles             <br>
