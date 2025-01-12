@@ -33,3 +33,4 @@ flask-project-Max0072/                                      <br>
 ├── README.md          # Documentation                      <br>
 ├── requirements.txt   # List of dependencies               <br>
 └── server.py          # Main server file                   <br>
+
