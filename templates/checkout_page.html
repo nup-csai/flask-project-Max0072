@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f7f7;
+    }
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 5px;
+      color: #555;
+    }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="number"], select {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    input[type="radio"] {
+      margin-right: 10px;
+    }
+    .submit-btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+    .submit-btn:hover {
+      background-color: #45a049;
+    }
+    .summary {
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-top: 30px;
+    }
+    .summary h2 {
+      margin-top: 0;
+    }
+    .summary .item {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+    }
+    .summary .item:last-child {
+      font-weight: bold;
+      border-top: 1px solid #ccc;
+      padding-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Order Delivery</h1>
+
+    <!-- Checkout Form -->
+    <form action="{{ url_for("final_page", link_token=link_token) }}">
+
+      <!-- Shipping Address Fields -->
+      <div class="form-group">
+        <label for="first-name">First Name</label>
+        <input type="text" id="first-name" name="first-name" placeholder="Enter your first name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="last-name">Last Name</label>
+        <input type="text" id="last-name" name="last-name" placeholder="Enter your last name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+      </div>
+
+      <div class="form-group">
+        <label for="address">Address</label>
+        <input type="text" id="address" name="address" placeholder="Enter your address" required>
+      </div>
+
+      <div class="form-group">
+        <label for="city">City</label>
+        <input type="text" id="city" name="city" placeholder="Enter your city" required>
+      </div>
+
+      <div class="form-group">
+        <label for="postcode">Post Code</label>
+        <input type="number" id="postcode" name="postcode" placeholder="Enter your post code" required>
+      </div>
+
+      <div class="form-group">
+        <label for="country">Country</label>
+        <select id="country" name="country" required>
+          <option value="USA">USA</option>
+          <option value="Canada">Canada</option>
+          <option value="Cyprus">Cyprus</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="payment-method">Payment Method</label>
+        <div>
+          <label><input type="radio" name="payment-method" value="credit-card" required> Credit Card</label>
+          <label><input type="radio" name="payment-method" value="paypal"> PayPal</label>
+          <label><input type="radio" name="payment-method" value="cash-on-delivery"> Cash on Delivery</label>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+        <button type="submit" class="submit-btn">Place Order</button>
+
+    </form>
+
+    <!-- Order Summary -->
+    <div class="summary">
+      <h2>Order Summary</h2>
+        {% for product in products %}
+      <div class="item">
+          <span>{{product.name}} x <b>{{ product.quantity }}</b></span>
+        <span>€{{ product.price * product.quantity }}</span>
+      </div>
+        {% endfor %}
+
+      <div class="item">
+        <span>Shipping</span>
+        <span>€250</span>
+      </div>
+      <div class="item">
+        <span>Total</span>
+        <span>€{{ sum + 250 }}</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

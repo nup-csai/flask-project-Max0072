@@ -1,0 +1,94 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+}
+/* Кнопка гамбургер */
+.hamburger {
+    font-size: 50px;
+    color: #2c3e50;
+    background-color: rgba(0, 0, 0, 0);
+    padding: 0;
+    border-radius: 0%;
+    position: absolute;
+    top: 0;
+    right: 20px;
+}
+
+
+
+/* Сайдбар */
+#sidebar {
+    width: 250px;
+    height: 100%;
+    background-color: #2c3e50;
+    color: white;
+    position: fixed;
+    z-index: 1000;
+    right: -250px; /* Сайдбар изначально скрыт за пределами экрана справа */
+    top: 0;
+    transition: transform 0.6s ease; /* Плавное появление */
+    display: flex;
+    flex-direction: column; /* Располагаем элементы вертикально */
+    justify-content: space-between; /* Равномерно распределяем элементы */
+    padding: 10px;
+}
+
+/* Стиль для ссылок в сайдбаре */
+#sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#sidebar ul li {
+    padding: 15px;
+}
+
+#sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+}
+
+/* Контейнер для кнопки Logout */
+#logout-container {
+    margin-top: auto; /* Перемещает кнопку в самый низ */
+}
+
+#logout-btn {
+    background-color: #e74c3c;  /* Красный цвет кнопки */
+    color: white;
+    text-align: center;
+    padding: 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%; /* Заставляет кнопку занимать всю ширину сайдбара */
+    display: block;
+    cursor: pointer;
+}
+
+#logout-btn:hover {
+    background-color: #c0392b; /* Цвет при наведении */
+}
+
+/* Основной контент */
+#main-content {
+    flex: 1;
+    padding: 20px;
+}
+
+/* Когда сайдбар видим, сдвигаем его в экран */
+#sidebar.show {
+    transform: translateX(-250px); /* Перемещаем сайдбар в экран */
+}
+
+/* Сдвигаем основной контент влево, если сайдбар открыт */
+#main-content.shifted {
+    margin-right: 0px; /* Сдвиг основного контента влево */
+}

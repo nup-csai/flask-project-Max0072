@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login_styling.css') }}"> <!-- Подключаем CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> <!-- Подключаем Font Awesome для иконки -->
+    <style>
+        /* Стили для кнопки-глазка */
+        #togglePassword, #toggleRepeatPassword {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            position: absolute;
+            right: 10px;
+            top: 35px;
+        }
+
+        #eye-icon, #eye-icon-repeat {
+            color: #888; /* Цвет для иконки */
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        input[type="password"] {
+            padding-right: 12px; /* Место для иконки */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Регистрация</h1>
+
+        <!-- Форма для регистрации -->
+        <form action="{{ url_for('register_process') }}" method="POST">
+            <!-- Поле для ввода имени пользователя -->
+            <div class="form-group">
+                <label for="username">Имя пользователя</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="New username" required>
+            </div>
+
+            <!-- Поле для ввода email -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+            </div>
+
+            <!-- Поле для ввода пароля -->
+            <div class="form-group">
+                <label for="password">New password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="New password" required>
+                <!-- Кнопка глазка для отображения пароля -->
+                <button type="button" id="togglePassword">
+                    <i id="eye-icon" class="fa fa-eye"></i>
+                </button>
+            </div>
+
+            <!-- Поле для повторного ввода пароля -->
+            <div class="form-group">
+                <label for="repeat_password">Repeat password</label>
+                <input type="password" class="form-control" id="repeat_password" name="repeat_password" placeholder="Repeat password" required>
+                <!-- Кнопка глазка для отображения повторного пароля -->
+                <button type="button" id="toggleRepeatPassword">
+                    <i id="eye-icon-repeat" class="fa fa-eye"></i>
+                </button>
+            </div>
+
+            <!-- Кнопка отправки формы -->
+            <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+        </form>
+
+        <!-- Ссылка на страницу входа -->
+        <form action="{{ url_for('login_page') }}">
+            <button type="submit" class="btn btn-secondary">Войти</button>
+        </form>
+
+        <!-- Сообщения об ошибках или успехах -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flash-messages">
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Скрипт для переключения видимости пароля -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const togglePasswordButton = document.getElementById('togglePassword');
+            const passwordField = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+
+            const toggleRepeatPasswordButton = document.getElementById('toggleRepeatPassword');
+            const repeatPasswordField = document.getElementById('repeat_password');
+            const eyeIconRepeat = document.getElementById('eye-icon-repeat');
+
+            // Переключение видимости пароля
+            togglePasswordButton.addEventListener('click', function() {
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                    repeatPasswordField.type = 'text';
+                    eyeIconRepeat.classList.remove('fa-eye');
+                    eyeIconRepeat.classList.add('fa-eye-slash');
+                } else {
+                    passwordField.type = 'password';
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                    repeatPasswordField.type = 'password';
+                    eyeIconRepeat.classList.remove('fa-eye-slash');
+                    eyeIconRepeat.classList.add('fa-eye');
+                }
+            });
+
+            // Переключение видимости повторного пароля
+            toggleRepeatPasswordButton.addEventListener('click', function() {
+                if (repeatPasswordField.type === 'password') {
+                    passwordField.type = 'text';
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                    repeatPasswordField.type = 'text';
+                    eyeIconRepeat.classList.remove('fa-eye');
+                    eyeIconRepeat.classList.add('fa-eye-slash');
+                } else {
+                    passwordField.type = 'password';
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                    repeatPasswordField.type = 'password';
+                    eyeIconRepeat.classList.remove('fa-eye-slash');
+                    eyeIconRepeat.classList.add('fa-eye');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

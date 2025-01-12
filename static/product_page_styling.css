@@ -1,0 +1,77 @@
+/* Общие стили для body */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+#learn_more {
+    width: 80%;
+    position: relative;
+    left: 35px;
+    top: -30px
+
+  }
+/* Контейнер для контента */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Стили для grid-контейнера (сетка для товаров) */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);  /* Два блока в ряду */
+    gap: 20px;  /* Отступы между блоками */
+    justify-items: center;
+}
+
+/* Стили для карточек товаров */
+.product-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 100%;
+    max-width: 300px;
+    transition: transform 0.3s ease;
+}
+
+/* Эффект при наведении на карточку */
+.product-card:hover {
+    transform: scale(1.05);  /* Увеличиваем размер карточки при наведении */
+}
+
+/* Стили для изображения товара */
+.product-image {
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+}
+#product-price {
+    margin: 0;
+
+}
+/* Стили для заголовка и описания */
+.product-card h2 {
+    font-size: 20px;
+    color: #333;
+    margin: 10px 15px;
+}
+
+.product-card p {
+    font-size: 14px;
+    color: #555;
+    margin: 0 15px 20px;
+}
+
+/* Медиа-запросы для адаптивности */
+@media (max-width: 768px) {
+    .product-grid {
+        grid-template-columns: 1fr;  /* Один блок в ряду на мобильных устройствах */
+    }
+}
+

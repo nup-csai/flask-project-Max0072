@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сайт с исчезающим сайдбаром</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar_styling.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='text_styling.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='product_page_styling.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='model_window.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='cart_styling.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='add_new_product_styling.css') }}"> <!-- Подключаем CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='delete_product.css') }}"> <!-- Подключаем CSS -->
+</head>
+<body>
+
+
+    <!-- Сайдбар -->
+    <div id="sidebar">
+        <ul>
+            <li><a href="/admin/add/{{ link_token }}" onclick="showTab('tab2')">Add new product</a></li>
+            <li><a href="/admin/delete/{{ link_token }}" onclick="showTab('tab3')">Delete product</a></li>
+
+
+        </ul>
+        <div id="logout-container">
+            <a href="/logout/{{link_token}}" onclick="showTab('tab1')" id="logout-btn">Logout</a>
+        </div>
+    </div>
+
+     <!-- фон -->
+    <div id="overlay"></div>
+
+    <!-- Основной контент -->
+    <div id="main-content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <div class="hamburger" id="hamburger">
+        ≡
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const toggleButton = document.getElementById('toggle-sidebar');
+            const overlay = document.getElementById('overlay')
+
+            // Установим область, на которой сайдбар будет появляться (например, 30px от правого края)
+            const triggerAreaWidth = 50;
+            const removeAreaWidth = 180;
+            // Показываем сайдбар, когда курсор приближается к правому краю экрана
+            window.addEventListener('mousemove', function(event) {
+                if (window.innerWidth - event.clientX < triggerAreaWidth) {
+                    sidebar.classList.add('show');
+                    mainContent.classList.add('shifted');
+                    overlay.classList.add('appear_right')
+                } else if (window.innerWidth - event.clientX > removeAreaWidth){
+                    sidebar.classList.remove('show');
+                    mainContent.classList.remove('shifted');
+                    overlay.classList.remove('appear_right')
+                }
+            });
+
+            // Переключение видимости сайдбара при клике на кнопку
+            toggleButton.addEventListener('click', function() {
+                sidebar.classList.toggle('show');
+                mainContent.classList.toggle('shifted');
+                overlay.classList.toggle('appear_right')
+            });
+        });
+    </script>
+</body>
+</html>

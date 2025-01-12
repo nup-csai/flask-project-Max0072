@@ -1,0 +1,51 @@
+/* Общие стили для модального окна */
+.modal {
+    display: none; /* Изначально скрыто */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+    z-index: 1000; /* Слой под модальным окном */
+    opacity: 0; /* Изначально невидимо */
+    transition: opacity 0.3s ease-in-out; /* Плавное исчезновение/появление */
+    visibility: hidden; /* Скрываем его с помощью visibility */
+}
+
+/* Когда модальное окно активно (появляется на экране) */
+.modal.show {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; /* Плавный эффект появления */
+}
+
+/* Содержимое модального окна */
+.modal-content {
+    position: relative;
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Кнопка закрытия модального окна */
+.close-btn {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: #000;
+    text-decoration: none;
+}

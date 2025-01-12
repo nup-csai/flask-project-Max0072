@@ -1,0 +1,76 @@
+{% extends 'admin_sidebar.html' %}
+{% block content %}
+    <!-- Основной контент -->
+    <div id="product-list">
+        {% for product in products %}
+        <div class="product-item" data-id="{{ product.id }}">
+           <img src="{{ url_for('uploaded_file', filename=product.filename) }}" alt="{{ product.name }}" class="product-image">
+            <span class="product-name">{{ product.name }}</span>
+            <button class="delete-btn" data-id="{{ product.id }}">Удалить</button>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Модальное окно для подтверждения удаления -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <h3>Вы уверены, что хотите удалить этот товар?</h3>
+            <button id="confirmDeleteBtn">Да, удалить</button>
+            <button id="cancelDeleteBtn">Отмена</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+            const modal = document.getElementById('deleteModal');
+            const closeModal = document.getElementById('closeModal');
+            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+            const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+            let productIdToDelete = null;
+
+            // Открытие модального окна при нажатии на кнопку удаления
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    productIdToDelete = this.getAttribute('data-id');
+                    modal.style.display = 'block';
+                });
+            });
+
+            // Закрытие модального окна при нажатии на крестик или кнопку "Отмена"
+            closeModal.addEventListener('click', closeModalWindow);
+            cancelDeleteBtn.addEventListener('click', closeModalWindow);
+
+            function closeModalWindow() {
+                modal.style.display = 'none';
+            }
+
+            // Подтверждение удаления
+            confirmDeleteBtn.addEventListener('click', function() {
+                if (productIdToDelete) {
+                    // Отправляем запрос на сервер для удаления товара
+                    fetch(`/admin/delete/process/{{ link_token }}/${productIdToDelete}`, {
+                        method: 'DELETE',
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            // Удаление товара со страницы
+                            const productItem = document.querySelector(`.product-item[data-id="${productIdToDelete}"]`);
+                            if (productItem) {
+                                productItem.remove();
+                            }
+                            closeModalWindow(); // Закрытие модального окна
+                        } else {
+                            alert('Не удалось удалить товар');
+                        }
+                    })
+                    .catch(error => {
+                        alert('Произошла ошибка');
+                    });
+                }
+            });
+        });
+    </script>
+
+{% endblock %}
