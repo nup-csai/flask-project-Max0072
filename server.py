@@ -6,9 +6,12 @@ from werkzeug.utils import secure_filename
 from config import Config
 from models import db, User, Product, CartItem
 
+
+
 app = Flask(__name__)
 app.config.from_object(Config)  # Загружаем конфигурацию из файла config.py
 db.init_app(app)
+
 
 # app.secret_key = os.environ.get('FLASK_SECRET_KEY')
 app.secret_key = "234234fwfdfvef3fvefv"
