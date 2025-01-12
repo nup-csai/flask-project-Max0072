@@ -21,6 +21,7 @@ Whether you're stocking up for the winter or preparing for a cozy evening by the
 
 
 ### Project structure
+'''
 flask-project-Max0072/
 │
 ├── instance/          # Folder with the database (SQLite)
@@ -33,3 +34,4 @@ flask-project-Max0072/
 ├── README.md          # Documentation
 ├── requirements.txt   # List of dependencies
 └── server.py          # Main server file
+'''
