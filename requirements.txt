@@ -2,3 +2,6 @@ Flask
 requests
 pytest
 flask_sqlalchemy
+sql
+bcrypt
+werkzeug
