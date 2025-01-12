@@ -18,3 +18,18 @@ This project is an online platform where users can easily log in and purchase fi
 - **Database**: SQLite for storing user and order data
 
 Whether you're stocking up for the winter or preparing for a cozy evening by the fire, this website provides an easy and secure way to buy firewood online with just a few clicks.
+
+
+### Project structure
+flask-project-Max0072/
+│
+├── instance/          # Folder with the database (SQLite)
+├── pictures/          # Folder with images
+├── static/            # Folder with CSS styles
+├── templates/         # Folder with HTML templates
+├── config.py          # Configuration file
+├── Dockerfile          # Dockerfile
+├── models.py          # Database models
+├── README.md          # Documentation
+├── requirements.txt   # List of dependencies
+└── server.py          # Main server file
