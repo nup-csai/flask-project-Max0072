@@ -21,17 +21,15 @@ Whether you're stocking up for the winter or preparing for a cozy evening by the
 
 
 ### Project structure
-'''
-flask-project-Max0072/
-│
-├── instance/          # Folder with the database (SQLite)
-├── pictures/          # Folder with images
-├── static/            # Folder with CSS styles
-├── templates/         # Folder with HTML templates
-├── config.py          # Configuration file
-├── Dockerfile          # Dockerfile
-├── models.py          # Database models
-├── README.md          # Documentation
-├── requirements.txt   # List of dependencies
-└── server.py          # Main server file
-'''
+flask-project-Max0072/                                      <br>
+│                                                           <br>
+├── instance/          # Folder with the database (SQLite)  <br>
+├── pictures/          # Folder with images                 <br>
+├── static/            # Folder with CSS styles             <br>
+├── templates/         # Folder with HTML templates         <br>
+├── config.py          # Configuration file                 <br>
+├── Dockerfile          # Dockerfile                        <br>
+├── models.py          # Database models                    <br>
+├── README.md          # Documentation                      <br>
+├── requirements.txt   # List of dependencies               <br>
+└── server.py          # Main server file                   <br>
