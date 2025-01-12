@@ -1,23 +1,23 @@
 {% extends 'admin_sidebar.html' %}
 {% block content %}
-    <!-- Основной контент -->
+    <!-- Main Content -->
     <div id="product-list">
         {% for product in products %}
         <div class="product-item" data-id="{{ product.id }}">
            <img src="{{ url_for('uploaded_file', filename=product.filename) }}" alt="{{ product.name }}" class="product-image">
             <span class="product-name">{{ product.name }}</span>
-            <button class="delete-btn" data-id="{{ product.id }}">Удалить</button>
+            <button class="delete-btn" data-id="{{ product.id }}">Delete</button>
         </div>
         {% endfor %}
     </div>
 
-    <!-- Модальное окно для подтверждения удаления -->
+    <!-- Modal for delete confirmation -->
     <div id="deleteModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" id="closeModal">&times;</span>
-            <h3>Вы уверены, что хотите удалить этот товар?</h3>
-            <button id="confirmDeleteBtn">Да, удалить</button>
-            <button id="cancelDeleteBtn">Отмена</button>
+            <h3>Are you sure you want to delete this product?</h3>
+            <button id="confirmDeleteBtn">Yes, Delete</button>
+            <button id="cancelDeleteBtn">Cancel</button>
         </div>
     </div>
 
@@ -30,7 +30,7 @@
             const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
             let productIdToDelete = null;
 
-            // Открытие модального окна при нажатии на кнопку удаления
+            // Open modal when delete button is clicked
             deleteButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     productIdToDelete = this.getAttribute('data-id');
@@ -38,7 +38,7 @@
                 });
             });
 
-            // Закрытие модального окна при нажатии на крестик или кнопку "Отмена"
+            // Close modal when the close button or "Cancel" button is clicked
             closeModal.addEventListener('click', closeModalWindow);
             cancelDeleteBtn.addEventListener('click', closeModalWindow);
 
@@ -46,27 +46,27 @@
                 modal.style.display = 'none';
             }
 
-            // Подтверждение удаления
+            // Confirm delete action
             confirmDeleteBtn.addEventListener('click', function() {
                 if (productIdToDelete) {
-                    // Отправляем запрос на сервер для удаления товара
+                    // Send DELETE request to server to delete the product
                     fetch(`/admin/delete/process/{{ link_token }}/${productIdToDelete}`, {
                         method: 'DELETE',
                     })
                     .then(response => {
                         if (response.ok) {
-                            // Удаление товара со страницы
+                            // Remove product from the page
                             const productItem = document.querySelector(`.product-item[data-id="${productIdToDelete}"]`);
                             if (productItem) {
                                 productItem.remove();
                             }
-                            closeModalWindow(); // Закрытие модального окна
+                            closeModalWindow(); // Close the modal window
                         } else {
-                            alert('Не удалось удалить товар');
+                            alert('Failed to delete product');
                         }
                     })
                     .catch(error => {
-                        alert('Произошла ошибка');
+                        alert('An error occurred');
                     });
                 }
             });

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Регистрация</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='login_styling.css') }}"> <!-- Подключаем CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> <!-- Подключаем Font Awesome для иконки -->
+    <title>Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login_styling.css') }}"> <!-- Linking the CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> <!-- Linking Font Awesome for the icon -->
     <style>
-        /* Стили для кнопки-глазка */
+        /* Styles for the eye button */
         #togglePassword, #toggleRepeatPassword {
             background: none;
             border: none;
@@ -19,7 +19,7 @@
         }
 
         #eye-icon, #eye-icon-repeat {
-            color: #888; /* Цвет для иконки */
+            color: #888; /* Icon color */
         }
 
         .form-group {
@@ -27,59 +27,59 @@
         }
 
         input[type="password"] {
-            padding-right: 12px; /* Место для иконки */
+            padding-right: 12px; /* Space for the icon */
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>Регистрация</h1>
+        <h1>Registration</h1>
 
-        <!-- Форма для регистрации -->
+        <!-- Registration form -->
         <form action="{{ url_for('register_process') }}" method="POST">
-            <!-- Поле для ввода имени пользователя -->
+            <!-- Username input field -->
             <div class="form-group">
-                <label for="username">Имя пользователя</label>
+                <label for="username">Username</label>
                 <input type="text" class="form-control" id="username" name="username" placeholder="New username" required>
             </div>
 
-            <!-- Поле для ввода email -->
+            <!-- Email input field -->
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
             </div>
 
-            <!-- Поле для ввода пароля -->
+            <!-- Password input field -->
             <div class="form-group">
                 <label for="password">New password</label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="New password" required>
-                <!-- Кнопка глазка для отображения пароля -->
+                <!-- Eye button to toggle password visibility -->
                 <button type="button" id="togglePassword">
                     <i id="eye-icon" class="fa fa-eye"></i>
                 </button>
             </div>
 
-            <!-- Поле для повторного ввода пароля -->
+            <!-- Repeat password input field -->
             <div class="form-group">
                 <label for="repeat_password">Repeat password</label>
                 <input type="password" class="form-control" id="repeat_password" name="repeat_password" placeholder="Repeat password" required>
-                <!-- Кнопка глазка для отображения повторного пароля -->
+                <!-- Eye button to toggle repeat password visibility -->
                 <button type="button" id="toggleRepeatPassword">
                     <i id="eye-icon-repeat" class="fa fa-eye"></i>
                 </button>
             </div>
 
-            <!-- Кнопка отправки формы -->
-            <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary">Register</button>
         </form>
 
-        <!-- Ссылка на страницу входа -->
+        <!-- Login page link -->
         <form action="{{ url_for('login_page') }}">
-            <button type="submit" class="btn btn-secondary">Войти</button>
+            <button type="submit" class="btn btn-secondary">Login</button>
         </form>
 
-        <!-- Сообщения об ошибках или успехах -->
+        <!-- Flash messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <ul class="flash-messages">
@@ -91,7 +91,7 @@
         {% endwith %}
     </div>
 
-    <!-- Скрипт для переключения видимости пароля -->
+    <!-- Script to toggle password visibility -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const togglePasswordButton = document.getElementById('togglePassword');
@@ -102,7 +102,7 @@
             const repeatPasswordField = document.getElementById('repeat_password');
             const eyeIconRepeat = document.getElementById('eye-icon-repeat');
 
-            // Переключение видимости пароля
+            // Toggle password visibility
             togglePasswordButton.addEventListener('click', function() {
                 if (passwordField.type === 'password') {
                     passwordField.type = 'text';
@@ -121,7 +121,7 @@
                 }
             });
 
-            // Переключение видимости повторного пароля
+            // Toggle repeat password visibility
             toggleRepeatPasswordButton.addEventListener('click', function() {
                 if (repeatPasswordField.type === 'password') {
                     passwordField.type = 'text';

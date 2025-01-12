@@ -3,7 +3,7 @@
     <h2 class="text-center mb-4">The Biggest Online Store of Firewood</h2>
 
     <div class="container">
-        <!-- Перебираем все товары и выводим их в виде карточек -->
+        <!-- Iterate through all products and display them as cards -->
         <div class="product-grid">
             {% for product in products %}
             <div class="product-card">
@@ -16,9 +16,8 @@
     </div>
 
     {% for product in products %}
-    <!-- Модальное окно -->
+    <!-- Modal window -->
     <div id="myModal{{ product.id }}" class="modal">
-
         <div class="modal-content">
             <span class="close-btn" data-id="{{ product.id }}">&times;</span>
             <div class="product-image" style="background-image: url('pictures/{{ product.filename }}');"></div>
@@ -27,47 +26,42 @@
             <h3 id="product-price">€{{ product.price }}/m³</h3>
             <form action="{{ url_for('add_to_cart', link_token=link_token, product_id=product.id) }}" method="POST">
                 <div class="quantity-controls">
-                    <input name="quantity" type="number" value="1" class="quantity-input" data-id="1" min="1">
+                    <input name="quantity" type="number" value="1" class="quantity-input" data-id="{{ product.id }}" min="1">
                 </div>
                 <button class="openBuyButton" data-id="{{ product.id }}">Add to cart</button>
             </form>
-
         </div>
     </div>
     {% endfor %}
 
+    <!-- Sidebar2 (Cart) -->
+    <div id="sidebar2">
+        <h2 class="cart-label">Cart</h2>
 
-
-
-<!-- Сайдбар2 -->
-<div id="sidebar2">
-    <h2 class="cart-label">Cart</h2>
-
-    {% for product in cart %}
+        {% for item in cart %}
         <div class="cart-item">
-            <img src="{{ url_for('uploaded_file', filename=product.filename) }}" alt="Product Image" class="cart-image">
+            <img src="{{ url_for('uploaded_file', filename=item.filename) }}" alt="Product Image" class="cart-image">
             <div class="product-info">
-                <h3 class="product-name">{{ product.name }}</h3>
-                <span class="product-price">€{{ product.price }}</span>
+                <h3 class="product-name">{{ item.name }}</h3>
+                <span class="product-price">€{{ item.price }}</span>
                 <div class="quantity-control">
-                    <span class="product-quantity">Quantity: {{ product.quantity }}</span>
+                    <span class="product-quantity">Quantity: {{ item.quantity }}</span>
                 </div>
-                <span class="total-price">€{{ "{:.2f}".format(product.price * product.quantity) }}</span>
+                <span class="total-price">€{{ "{:.2f}".format(item.price * item.quantity) }}</span>
             </div>
-            <form action="{{ url_for('delete_from_cart', id=product.product_id, link_token=link_token) }}" method="POST">
+            <form action="{{ url_for('delete_from_cart', id=item.product_id, link_token=link_token) }}" method="POST">
                 <button>⌫</button>
             </form>
         </div>
-    {% endfor %}
+        {% endfor %}
 
-    <div class="cart-summary">
-        <p>Total: <span id="total-amount">€{{ sum }}</span></p>
-        <form action="{{ url_for('checkout', link_token=link_token) }}">
-            <button id="checkout-btn">Checkout</button>
-        </form>
+        <div class="cart-summary">
+            <p>Total: <span id="total-amount">€{{ sum }}</span></p>
+            <form action="{{ url_for('checkout', link_token=link_token) }}">
+                <button id="checkout-btn">Checkout</button>
+            </form>
+        </div>
     </div>
-</div>
-
 
     <div class="cart-button" id="cartButton">
         🛒
@@ -75,13 +69,13 @@
 
     <script>
 
-        // Используем делегирование событий для обработки всех кнопок и окон
+        // Use event delegation to handle all buttons and modal windows
         document.addEventListener('DOMContentLoaded', function () {
-            // Получаем все кнопки и модальные окна
+            // Get all buttons and modal windows
             const openModalBtns = document.querySelectorAll('.openModalBtn');
             const closeModalBtns = document.querySelectorAll('.close-btn');
 
-            // Открытие модального окна
+            // Open modal window
             openModalBtns.forEach(function (button) {
                 button.addEventListener('click', function () {
                     const productId = this.getAttribute('data-id');
@@ -90,7 +84,7 @@
                 });
             });
 
-            // Закрытие модального окна
+            // Close modal window
             closeModalBtns.forEach(function (button) {
                 button.addEventListener('click', function () {
                     const productId = this.getAttribute('data-id');
@@ -99,7 +93,7 @@
                 });
             });
 
-            // Закрытие модального окна, если пользователь кликает за пределами окна
+            // Close modal window if the user clicks outside
             window.addEventListener('click', function (event) {
                 const modals = document.querySelectorAll('.modal');
                 modals.forEach(function (modal) {
@@ -114,10 +108,10 @@
             const toggleButton = document.getElementById('toggle-sidebar');
             const overlay = document.getElementById('overlay')
 
-            // Установим область, на которой сайдбар будет появляться (например, 30px от правого края)
+            // Set the area where the sidebar will appear (for example, 30px from the left edge)
             const triggerAreaWidth = 50;
             const removeAreaWidth = 350;
-            // Показываем сайдбар, когда курсор приближается к левому краю экрана
+            // Show the sidebar when the cursor approaches the left edge of the screen
             window.addEventListener('mousemove', function(event) {
                 if (event.clientX < triggerAreaWidth) {
                     sidebar.classList.add('show');
@@ -130,20 +124,19 @@
                 }
             });
 
-            // Переключение видимости сайдбара при клике на кнопку
+            // Toggle sidebar visibility when clicking the button
             toggleButton.addEventListener('click', function() {
                 sidebar.classList.toggle('show');
                 mainContent.classList.toggle('shifted');
-                {#overlay.classList.toggle('appear_left')#}
             });
 
-            // Массив для хранения данных о корзине
+            // Array for storing cart data
             const cart = [
                 { id: 1, name: 'Product Name', price: 19.99, quantity: 1 },
-                // Можно добавить другие товары
+                // Other products can be added
             ];
 
-            // Функция для обновления общей суммы корзины
+            // Function to update the total amount in the cart
             function updateTotal() {
                 let total = 0;
                 cart.forEach(item => {
@@ -152,7 +145,7 @@
                 document.getElementById('total-amount').textContent = total.toFixed(2);
             }
 
-            // Обработчики кнопок увеличения и уменьшения количества товара
+            // Event handlers for increasing and decreasing product quantity
             document.querySelectorAll('.increase-btn').forEach(button => {
                 button.addEventListener('click', function () {
                     const productId = this.getAttribute('data-id');
@@ -162,11 +155,11 @@
                     const quantityInput = document.querySelector(`.quantity-input[data-id="${productId}"]`);
                     quantityInput.value = product.quantity;
 
-                    // Обновляем цену этого товара
+                    // Update the price of this product
                     const itemTotal = document.querySelector(`.item-total[data-id="${productId}"]`);
                     itemTotal.textContent = `$${(product.price * product.quantity).toFixed(2)}`;
 
-                    updateTotal(); // Обновляем общую сумму
+                    updateTotal(); // Update the total amount
                 });
              });
 
@@ -180,16 +173,16 @@
                         const quantityInput = document.querySelector(`.quantity-input[data-id="${productId}"]`);
                         quantityInput.value = product.quantity;
 
-                        // Обновляем цену этого товара
+                        // Update the price of this product
                         const itemTotal = document.querySelector(`.item-total[data-id="${productId}"]`);
                         itemTotal.textContent = `$${(product.price * product.quantity).toFixed(2)}`;
 
-                        updateTotal(); // Обновляем общую сумму
+                        updateTotal(); // Update the total amount
                     }
                 });
             });
 
-            // Обработчик изменения количества вручную в input
+            // Event handler for manually changing the quantity in the input field
             document.querySelectorAll('.quantity-input').forEach(input => {
                 input.addEventListener('input', function () {
                     const productId = this.getAttribute('data-id');
@@ -201,19 +194,19 @@
                         const itemTotal = document.querySelector(`.item-total[data-id="${productId}"]`);
                         itemTotal.textContent = `$${(product.price * product.quantity).toFixed(2)}`;
 
-                        updateTotal(); // Обновляем общую сумму
+                        updateTotal(); // Update the total amount
                     } else {
-                        this.value = product.quantity; // Если введено значение меньше 1, не меняем
+                        this.value = product.quantity; // If a value less than 1 is entered, do not change
                     }
                 });
             });
 
-            // Кнопка "Checkout" (вы можете добавить сюда функциональность для оформления заказа)
+            // Checkout button (you can add functionality for checkout here)
             document.getElementById('checkout-btn').addEventListener('click', function () {
                 alert('Proceeding to checkout...');
             });
 
-            // Инициализация данных корзины (заполнение из базы данных или других источников)
+            // Initialize cart data (you can populate it from a database or other sources)
             cart.forEach(item => {
                 document.querySelector(`.quantity-input[data-id="${item.id}"]`).value = item.quantity;
                 document.querySelector(`.item-total[data-id="${item.id}"]`).textContent = `$${(item.price * item.quantity).toFixed(2)}`;

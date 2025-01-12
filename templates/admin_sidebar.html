@@ -1,37 +1,34 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сайт с исчезающим сайдбаром</title>
+    <title>Website with Disappearing Sidebar</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='sidebar_styling.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='text_styling.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='product_page_styling.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='model_window.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='cart_styling.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='add_new_product_styling.css') }}"> <!-- Подключаем CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='delete_product.css') }}"> <!-- Подключаем CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='add_new_product_styling.css') }}"> <!-- Linking CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='delete_product.css') }}"> <!-- Linking CSS -->
 </head>
 <body>
 
-
-    <!-- Сайдбар -->
+    <!-- Sidebar -->
     <div id="sidebar">
         <ul>
-            <li><a href="/admin/add/{{ link_token }}" onclick="showTab('tab2')">Add new product</a></li>
-            <li><a href="/admin/delete/{{ link_token }}" onclick="showTab('tab3')">Delete product</a></li>
-
-
+            <li><a href="/admin/add/{{ link_token }}" onclick="showTab('tab2')">Add New Product</a></li>
+            <li><a href="/admin/delete/{{ link_token }}" onclick="showTab('tab3')">Delete Product</a></li>
         </ul>
         <div id="logout-container">
             <a href="/logout/{{link_token}}" onclick="showTab('tab1')" id="logout-btn">Logout</a>
         </div>
     </div>
 
-     <!-- фон -->
+    <!-- Background overlay -->
     <div id="overlay"></div>
 
-    <!-- Основной контент -->
+    <!-- Main Content -->
     <div id="main-content">
         {% block content %}
         {% endblock %}
@@ -48,23 +45,24 @@
             const toggleButton = document.getElementById('toggle-sidebar');
             const overlay = document.getElementById('overlay')
 
-            // Установим область, на которой сайдбар будет появляться (например, 30px от правого края)
+            // Set the area where the sidebar will appear (for example, 50px from the right edge)
             const triggerAreaWidth = 50;
             const removeAreaWidth = 180;
-            // Показываем сайдбар, когда курсор приближается к правому краю экрана
+
+            // Show the sidebar when the cursor approaches the right edge of the screen
             window.addEventListener('mousemove', function(event) {
                 if (window.innerWidth - event.clientX < triggerAreaWidth) {
                     sidebar.classList.add('show');
                     mainContent.classList.add('shifted');
                     overlay.classList.add('appear_right')
-                } else if (window.innerWidth - event.clientX > removeAreaWidth){
+                } else if (window.innerWidth - event.clientX > removeAreaWidth) {
                     sidebar.classList.remove('show');
                     mainContent.classList.remove('shifted');
                     overlay.classList.remove('appear_right')
                 }
             });
 
-            // Переключение видимости сайдбара при клике на кнопку
+            // Toggle the sidebar visibility when clicking the button
             toggleButton.addEventListener('click', function() {
                 sidebar.classList.toggle('show');
                 mainContent.classList.toggle('shifted');

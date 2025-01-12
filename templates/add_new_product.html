@@ -1,39 +1,38 @@
 {% extends 'admin_sidebar.html' %}
 {% block content %}
     <div class="container">
-        <h1>Добавить новый товар</h1>
+        <h1>Add New Product</h1>
 
-        <!-- Форма для добавления нового товара -->
+        <!-- Form for adding a new product -->
         <form action="{{ url_for('add_new_product_process', link_token=link_token) }}" method="POST" enctype="multipart/form-data">
 
-            <!-- Поле для имени товара -->
+            <!-- Field for product name -->
             <div class="form-group">
-                <label for="name">Название товара</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Введите название товара" required>
+                <label for="name">Product Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter product name" required>
             </div>
 
-            <!-- Поле для описания товара -->
+            <!-- Field for product description -->
             <div class="form-group">
-                <label for="description">Описание товара</label>
-                <textarea class="form-control" id="description" name="description" rows="4" placeholder="Введите описание товара" required></textarea>
+                <label for="description">Product Description</label>
+                <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter product description" required></textarea>
             </div>
 
+            <!-- Field for product price -->
             <div class="form-group">
                 <label for="price">Price</label>
                 <input type="number" step="any" class="form-control" id="price" name="price" required>
             </div>
 
-            <!-- Поле для загрузки изображения товара -->
+            <!-- Field for uploading product image -->
             <div class="form-group">
-                <label for="picture">Изображение товара</label>
+                <label for="picture">Product Image</label>
                 <input type="file" class="form-control" id="picture" name="picture" accept="image/*" required>
             </div>
 
-            <!-- Кнопка отправки формы -->
-            <button type="submit" class="btn btn-primary">Добавить товар</button>
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary">Add Product</button>
         </form>
-
-
     </div>
 
 {% endblock %}

@@ -6,19 +6,16 @@ from werkzeug.utils import secure_filename
 from config import Config
 from models import db, User, Product, CartItem
 
-
-
 app = Flask(__name__)
-app.config.from_object(Config)  # Загружаем конфигурацию из файла config.py
+app.config.from_object(Config)
 db.init_app(app)
-
 
 # app.secret_key = os.environ.get('FLASK_SECRET_KEY')
 app.secret_key = "234234fwfdfvef3fvefv"
 app.config['UPLOAD_FOLDER'] = 'pictures'
 
+
 def validate_email(email: str) -> bool:
-    """Проверка валидности email с помощью регулярного выражения"""
     regex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
     return re.match(regex, email) is not None
 
@@ -29,7 +26,7 @@ def validate_password(password: str) -> bool:
 
 @app.route("/")
 def start():
-    db.create_all()  # Создаст все таблицы на основе моделей, если они не существуют
+    db.create_all()
     session.clear()
     if 'user_id' in session:
         user = User.query.filter_by(id=session['user_id']).first()
@@ -71,10 +68,9 @@ def register_process():
         return redirect(url_for("register_page"), code=302)
 
     if password != repeat_password:
-        flash('passwords seem to be different!', 'error')
+        flash('Passwords seem to be different!', 'error')
         return redirect(url_for("register_page"))
 
-        # Проверка, что пользователя с таким email или username нет
     user = User.query.filter_by(email=email).first()
     if user:
         flash("Email has already been used!", 'danger')
@@ -82,19 +78,13 @@ def register_process():
 
     user = User.query.filter_by(username=username).first()
     if user:
-        flash("Пользователь с таким именем уже существует", 'danger')
+        flash("A user with this username already exists", 'danger')
         return redirect(url_for('register_page'))
-    print(email)
-    print(password)
-    print(username)
-    # Создаем нового пользователя
+
     new_user = User(username=username, email=email)
-    new_user.set_password(password)  # Хешируем пароль
+    new_user.set_password(password)
     db.session.add(new_user)
     db.session.commit()
-
-    flash("Вы успешно зарегистрированы!", 'success')
-
     return redirect(url_for("login_page"))
 
 
@@ -112,24 +102,16 @@ def login_process():
     user = User.query.filter_by(email=email).first()
     if user is None:
         user = User.query.filter_by(username=email).first()
-    print(email)
-    print(password)
-    print(user)
-
     if user is None:
-        flash("no such user", 'danger')
-        print("baad")
+        flash("No such user", 'danger')
         return redirect(url_for("login_page"))
     elif not user.check_password(password):
-        flash("wrong password", 'danger')
-        print("baad")
+        flash("Wrong password", 'danger')
         return redirect(url_for("login_page"))
-    print("gooood")
 
     token = str(uuid.uuid4())
     user.link_token = token
-    print(user.link_token)
-
+    print(f"User's new link token: {user.link_token}")
 
     session['user_id'] = user.id
     session.permanent = False
@@ -142,71 +124,48 @@ def login_process():
     if not remember_me:
         db.session.commit()
     if remember_me:
-        token = str(uuid.uuid4())   # Создаем уникальный токен
+        token = str(uuid.uuid4())
         user.remember_token = token
-        print(token)
         db.session.commit()
-        resp.set_cookie('remember_token', token,
-                        max_age=60 * 60 * 24 * 30)  # Устанавливаем срок действия cookie 30 дней
-
-
-    flash("Login successful!", "success")
+        resp.set_cookie('remember_token', token, max_age=60 * 60 * 24 * 30)
     return resp
-
-
-@app.route("/home/<uuid:link_token>")
-def home1(link_token):
-    user = User.query.filter_by(link_token=str(link_token)).first()
-    print(f"Homepage\nlink token: {link_token}, user: {user}")
-
-    return render_template('basicpage.html', username=user.username, link_token=link_token)
 
 
 @app.route("/description/<uuid:link_token>")
 def description(link_token):
-    user = User.query.filter_by(link_token=str(link_token)).first()
-    print(f"Description\nlink token: {link_token}, user: {user}")
-
-    return render_template("description.html", username=user.username, link_token=link_token)
+    return render_template("description.html", link_token=link_token)
 
 
 @app.route("/products/<uuid:link_token>")
 def products(link_token):
     user = User.query.filter_by(link_token=str(link_token)).first()
-    print(f"Add_new_product\nlink token: {link_token}, user: {user}")
-
-    products1 = Product.query.all()  # Получаем все товары из базы данных
+    products1 = Product.query.all()
     cart_items = CartItem.query.filter_by(user_id=user.id).all()
-
-    print(cart_items)
     sum = 0
     for i in cart_items:
         sum += (i.price * i.quantity)
     sum = round(sum, 2)
-    return render_template('product.html', products=products1,
-                           link_token=link_token, amount_of_products=len(products1), cart=cart_items, sum=sum)
+    return render_template('product.html', products=products1, link_token=link_token,
+                           amount_of_products=len(products1), cart=cart_items, sum=sum)
 
 
 @app.route('/products/add_to_cart/<uuid:link_token>/<product_id>', methods=["POST"])
 def add_to_cart(link_token, product_id):
     user = User.query.filter_by(link_token=str(link_token)).first()
-    print(f"Add_new_product\nlink token: {link_token}, user: {user}")
-
     product = Product.query.filter_by(id=product_id).first()
-
-    # product.cart = True
-    # product.quantity = product.quantity + int(request.form.get('quantity'))
-
     cart_item = CartItem.query.filter_by(product_id=product_id, user_id=user.id).first()
     if cart_item is None:
-        cart_item = CartItem(filename=product.filename, name=product.name,
-                             price=product.price, quantity=int(request.form.get('quantity')),
-                             user_id=user.id, product_id=product_id)
+        cart_item = CartItem(filename=product.filename,
+                             name=product.name,
+                             price=product.price,
+                             quantity=int(request.form.get('quantity')),
+                             user_id=user.id,
+                             product_id=product_id)
         db.session.add(cart_item)
     else:
         cart_item.quantity = cart_item.quantity + int(request.form.get('quantity'))
-    print(f"cart_item user_id: {cart_item.user_id}, product_id: {cart_item.product_id}")
     db.session.commit()
+    print(f"cart_item user_id: {cart_item.user_id}, product_id: {cart_item.product_id}")
     print(f'Product quantity: {cart_item.quantity}')
     return redirect(url_for('products', link_token=link_token))
 
@@ -214,13 +173,7 @@ def add_to_cart(link_token, product_id):
 @app.route("/products/delete/<uuid:link_token>/<id>", methods=["POST"])
 def delete_from_cart(id, link_token):
     user = User.query.filter_by(link_token=str(link_token)).first()
-    print(f"Add_new_product\nlink token: {link_token}, user: {user}")
-    # product = Product.query.filter_by(id=id).first()
-    # product.cart = False
-    # product.quantity = 0
-    print(f"user id: {user.id}, product id: {id}")
     cart_item = CartItem.query.filter_by(user_id=user.id, product_id=id).first()
-    print(f"cart_item user_id: {cart_item.user_id}, product_id: {cart_item.product_id}")
     if cart_item:
         db.session.delete(cart_item)
         db.session.commit()
@@ -238,6 +191,7 @@ def checkout(link_token):
     sum = round(sum, 2)
     return render_template("checkout_page.html", products=cart_items, link_token=link_token, sum=sum)
 
+
 @app.route("/final_page/<uuid:link_token>")
 def final_page(link_token):
     user = User.query.filter_by(link_token=str(link_token)).first()
@@ -246,23 +200,17 @@ def final_page(link_token):
     if cart_items:
         for cart_item in cart_items:
             db.session.delete(cart_item)
-            db.session.commit()
-
+        db.session.commit()
     return redirect("https://www.youtube.com/watch?v=q-Y0bnx6Ndw")
 
 
 @app.route("/admin/add/<uuid:link_token>")
 def add_new_product(link_token):
-    user = User.query.filter_by(link_token=str(link_token)).first()
-    print(f"Description\nlink token: {link_token}, user: {user}")
     return render_template("add_new_product.html", link_token=link_token)
 
 
 @app.route("/admin/add/process/<uuid:link_token>", methods=["POST"])
 def add_new_product_process(link_token):
-    user = User.query.filter_by(link_token=str(link_token)).first()
-    print(f"Add_new_product\nlink token: {link_token}, user: {user}")
-
     name = request.form['name']
     description = request.form['description']
     price = request.form['price']
@@ -270,49 +218,36 @@ def add_new_product_process(link_token):
     if picture:
         filename = secure_filename(picture.filename)
         picture.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
     new_product = Product(name=name, description=description, filename=filename, price=price)
     db.session.add(new_product)
     db.session.commit()
-    print(new_product.name)
-    print(new_product.description)
-    print(new_product.filename)
-
-    flash("Product has been added!", 'success')
+    print(f"New product: {new_product.name}")
+    print(f"Description: {new_product.description}")
+    print(f"Picture: {new_product.filename}")
     return render_template("add_new_product.html", link_token=link_token)
 
 
 @app.route("/admin/delete/<uuid:link_token>")
 def delete_product(link_token):
-    user = User.query.filter_by(link_token=str(link_token)).first()
-    print(f"Description\nlink token: {link_token}, user: {user}")
-
     products1 = Product.query.all()
-
     return render_template("delete_product.html", products=products1, link_token=link_token)
 
 
 @app.route("/admin/delete/process/<uuid:link_token>/<product_id>", methods=["DELETE"])
 def delete_product_process(link_token, product_id):
-    user = User.query.filter_by(link_token=str(link_token)).first()
-    print(f"Description\nlink token: {link_token}, user: {user}")
-
     product = Product.query.filter_by(id=product_id).first()
     cart_items = CartItem.query.filter_by(product_id=product_id).all()
     if cart_items:
         for cart_item in cart_items:
             db.session.delete(cart_item)
-
-    db.session.delete(product)  # Удаляем товар
-    db.session.commit()  # Подтверждаем изменения в базе данных
+    db.session.delete(product)
+    db.session.commit()
     return render_template("delete_product.html", link_token=link_token)
 
 
 @app.route('/products/pictures/<filename>')
 def uploaded_file(filename):
-    print(filename)
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-
 
 
 @app.route("/logout/<uuid:link_token>")
@@ -324,5 +259,4 @@ def logout(link_token):
     resp = make_response(redirect(url_for('login_page')))
     resp.delete_cookie('remember_token')
     user.remember_token = None
-
     return resp
