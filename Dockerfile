@@ -10,6 +10,9 @@ COPY requirements.txt .
 # 4. Устанавливаем зависимости из requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Устанавливаем Gunicorn
+RUN pip install gunicorn
+
 # 5. Копируем все файлы проекта в контейнер
 COPY . .
 
@@ -23,6 +26,6 @@ ENV FLASK_APP=server.py
 # 8. Устанавливаем команду для запуска приложения Flask
 CMD ["python", "server.py"]
 
-## Для Django
-#CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+#CMD ["gunicorn", "--bind", "0.0.0.0:8000", "server:app"]
+
 
