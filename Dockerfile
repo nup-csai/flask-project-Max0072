@@ -1,27 +1,27 @@
-# Используем официальный образ Python
-FROM python:3.9-slim
+# 1. Используем официальный образ Python как базовый
+FROM python:3.12-slim
 
-# Устанавливаем рабочую директорию
+# 2. Устанавливаем рабочую директорию внутри контейнера
 WORKDIR /app
 
-# Копируем файл зависимостей в контейнер
-COPY requirements.txt /app/
+# 3. Копируем файл requirements.txt в контейнер
+COPY requirements.txt .
 
-# Устанавливаем зависимости
-RUN python -m venv venv \
-    && . venv/bin/activate \
-    && pip install --no-cache-dir -r requirements.txt
+# 4. Устанавливаем зависимости из requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Копируем весь проект в контейнер
-COPY . /app/
+# 5. Копируем все файлы проекта в контейнер
+COPY . .
 
-# Экспонируем порт
-EXPOSE 8080
+# 6. Открываем нужный порт для Flask
+EXPOSE 5000
 
-# Устанавливаем переменную окружения для Flask
+# 7. Устанавливаем переменную окружения для Flask (если требуется)
 ENV FLASK_APP=server.py
-ENV FLASK_ENV=production
 
-# Запускаем Flask приложение
-CMD ["/app/venv/bin/flask", "--app", "server.py", "run", "-h", "0.0.0.0", "-p", "8080"]
+# 8. Устанавливаем команду для запуска приложения (для Flask)
+CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
+
+## Для Django
+#CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 

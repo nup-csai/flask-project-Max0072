@@ -10,6 +10,8 @@ app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
 
+
+
 # app.secret_key = os.environ.get('FLASK_SECRET_KEY')
 app.secret_key = "234234fwfdfvef3fvefv"
 app.config['UPLOAD_FOLDER'] = 'pictures'
@@ -22,6 +24,9 @@ def validate_email(email: str) -> bool:
 
 def validate_password(password: str) -> bool:
     return len(password) >= 8
+
+
+
 
 
 @app.route("/")
@@ -46,6 +51,9 @@ def start():
 
     # return redirect(url_for('register_page'))
     return redirect(url_for('login_page'))
+
+
+
 
 
 @app.route("/register")
@@ -260,3 +268,7 @@ def logout(link_token):
     resp.delete_cookie('remember_token')
     user.remember_token = None
     return resp
+
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)
