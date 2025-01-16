@@ -21,7 +21,7 @@ ENV FLASK_APP=server.py
 
 
 # 8. Устанавливаем команду для запуска приложения Flask
-CMD ["flask", "run"]
+CMD ["python", "server.py"]
 
 ## Для Django
 #CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
